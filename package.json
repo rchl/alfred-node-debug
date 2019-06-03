@@ -1,0 +1,45 @@
+{
+	"name": "alfred-node-debug",
+	"version": "0.0.1",
+	"description": "Alfred workflow for triggering debugging of node processes",
+	"license": "MIT",
+	"author": {
+		"name": "Rafal Chlodnicki",
+		"email": "rchl2k@gmail.com"
+	},
+	"engines": {
+		"node": ">=10"
+	},
+	"scripts": {
+		"test": "xo && ava",
+		"postinstall": "alfy-init",
+		"preuninstall": "alfy-cleanup"
+	},
+	"files": [
+		"index.js",
+		"debug.js",
+		"lib",
+		"info.plist"
+	],
+	"keywords": [
+		"alfred",
+		"workflow",
+		"alfy",
+		"node",
+		"debug",
+		"inspector",
+		"chrome"
+	],
+	"dependencies": {
+		"alfy": "^0.8.0",
+		"pid-from-port": "^1.1.2",
+		"ps-list": "^6.3.0",
+		"tree-kill": "^1.2.1"
+	},
+	"devDependencies": {
+		"alfy-test": "^0.3.0",
+		"ava": "*",
+		"get-port": "^5.0.0",
+		"xo": "*"
+	}
+}
