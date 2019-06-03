@@ -30,8 +30,8 @@ const loadProcesses = () => {
             }
 
             return processList
-                .map(process => Object.assign({}, process, {port: pidMap.get(process.pid)}))
-                .filter(process => Boolean(process.port));
+                .map(proc => Object.assign({}, proc, {port: pidMap.get(proc.pid)}))
+                .filter(proc => Boolean(proc.port) && proc.pid !== process.pid);
         });
     }
 
@@ -41,33 +41,33 @@ const loadProcesses = () => {
 loadProcesses()
     .then(processes => {
         const items = processes
-            .filter(process => !process.name.endsWith(' Helper'))
-            .map(process => {
-                const cleanedPath = process.cmd.replace(/\.app\/Contents\/.*$/, '.app');
+            .filter(proc => !proc.name.endsWith(' Helper'))
+            .map(proc => {
+                const cleanedPath = proc.cmd.replace(/\.app\/Contents\/.*$/, '.app');
 
-                // TODO: Use the `process.path` property in `ps-list` when implemented there
+                // TODO: Use the `proc.path` property in `ps-list` when implemented there
                 // The below can be removed then
                 const pathForIcon = cleanedPath.replace(/ -.*/, ''); // Removes arguments
 
                 let subtitle = cleanedPath;
 
-                if (process.port) {
-                    // TODO; Use `process.path` property
-                    subtitle = `${process.port} - ${subtitle}`;
+                if (proc.port) {
+                    // TODO; Use `proc.path` property
+                    subtitle = `${proc.port} - ${subtitle}`;
                 }
 
                 return {
-                    title: process.name,
-                    autocomplete: process.name,
+                    title: proc.name,
+                    autocomplete: proc.name,
                     subtitle,
-                    arg: process.pid,
+                    arg: proc.pid,
                     icon: {
                         type: 'fileicon',
                         path: pathForIcon
                     },
                     mods: {
                         shift: {
-                            subtitle: `CPU ${process.cpu}%`
+                            subtitle: `CPU ${proc.cpu}%`
                         },
                     }
                 };
