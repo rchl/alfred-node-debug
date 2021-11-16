@@ -37,6 +37,7 @@
 		"tree-kill": "^1.2.1"
 	},
 	"devDependencies": {
+		"@types/node": "^16.11.7",
 		"alfy-test": "^0.3.0",
 		"ava": "*",
 		"get-port": "^5.0.0",

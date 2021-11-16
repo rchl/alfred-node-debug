@@ -2,4 +2,12 @@
 
 const treeKill = require('tree-kill');
 
-treeKill(Number.parseInt(process.argv[2]), 'SIGUSR1');
+const sendSigusr1 = pid => {
+    return new Promise(resolve => {
+        treeKill(pid, 'SIGUSR1', error => {
+            resolve(error);
+        });
+    });
+}
+
+sendSigusr1(Number.parseInt(process.argv[2]))

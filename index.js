@@ -1,55 +1,54 @@
 'use strict';
 
 const alfy = require('alfy');
+const os = require('os');
 const psList = require('ps-list');
 const pidFromPort = require('pid-from-port');
 const util = require('./lib/util');
 
-const loadProcesses = () => {
-    if (alfy.input.startsWith(':')) {
-        const search = alfy.input.slice(1);
+const WORKFLOW_ID = '81F6B074-F56F-496C-BE12-3756E6898E2A'
+const HOMEDIR_RE = new RegExp(os.homedir(), 'g');
 
-        return Promise.all([
-            pidFromPort.list(),
-            psList({all: false})
-        ]).then(result => {
-            const ports = result[0];
-            const processList = result[1];
+async function main() {
+    const processes = (await psList({ all: false }))
+        // .filter(proc => !proc.name.endsWith(' Helper') && proc.pid !== process.pid)
+        .filter(proc => proc.name === 'node' && proc.pid !== process.pid && !proc.cmd?.includes(WORKFLOW_ID))
+    const filter = alfy.input;
+    /** @type {(import('ps-list').ProcessDescriptor & { port?: string })[]} */
+    let items = []
 
-            // Swap port and pid
-            const pidMap = new Map();
-            for (const entry of ports.entries()) {
-                const port = String(entry[0]);
+    // Filtering by port (filter prefixed with ":").
+    if (filter.startsWith(':')) {
+        const portFilter = filter.slice(1);
 
-                if (!port.includes(search)) {
-                    // Filter out results which don't match the search term
-                    continue;
-                }
+        const portToPidMap = await pidFromPort.list();
+        const pidToPortMap = new Map();
+        for (const entry of portToPidMap.entries()) {
+            const port = String(entry[0]);
 
-                pidMap.set(entry[1], String(entry[0]));
+            if (!port.includes(portFilter)) {
+                // Filter out results which don't match the search term
+                continue;
             }
 
-            return processList
-                .map(proc => Object.assign({}, proc, {port: pidMap.get(proc.pid)}))
-                .filter(proc => Boolean(proc.port) && proc.pid !== process.pid);
-        });
+            pidToPortMap.set(entry[1], String(entry[0]));
+        }
+
+        items = processes
+            .filter(proc => pidToPortMap.has(proc.pid))
+            .map(proc => Object.assign({}, proc, { port: pidToPortMap.get(proc.pid) }));
+    } else {
+        items = alfy.inputMatches(processes, 'cmd')
     }
 
-    return psList().then(data => alfy.inputMatches(data, 'name'));
-};
-
-loadProcesses()
-    .then(processes => {
-        const items = processes
-            .filter(proc => !proc.name.endsWith(' Helper'))
+    alfy.output(
+        items
             .map(proc => {
-                const cleanedPath = proc.cmd.replace(/\.app\/Contents\/.*$/, '.app');
+                const cleanedPath = (proc.cmd || '---no command--')
+                    .replace(/\.app\/Contents\/.*$/, '.app')
+                    .replace(HOMEDIR_RE, '~');
 
-                // TODO: Use the `proc.path` property in `ps-list` when implemented there
-                // The below can be removed then
-                const pathForIcon = cleanedPath.replace(/ -.*/, ''); // Removes arguments
-
-                let subtitle = cleanedPath;
+                let subtitle = `(${proc.pid}) ${cleanedPath}`;
 
                 if (proc.port) {
                     // TODO; Use `proc.path` property
@@ -57,22 +56,18 @@ loadProcesses()
                 }
 
                 return {
-                    title: proc.name,
-                    autocomplete: proc.name,
+                    title: cleanedPath,
                     subtitle,
                     arg: proc.pid,
-                    icon: {
-                        type: 'fileicon',
-                        path: pathForIcon
-                    },
                     mods: {
                         shift: {
-                            subtitle: `CPU ${proc.cpu}%`
+                            subtitle: `CPU ${proc.cpu}%, Memory: ${proc.memory}`
                         },
                     }
                 };
             })
-            .sort(util.sorter);
+            .sort(util.sorter)
+    );
+}
 
-        alfy.output(items);
-    });
+main();
