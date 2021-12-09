@@ -66,8 +66,5 @@ alfy.output(
 
             return item;
         })
-        .sort(sorter),
-    // {
-    //     rerunInterval: 1,
-    // }
+        .sort(sorter)
 );

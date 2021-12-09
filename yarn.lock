@@ -3886,10 +3886,10 @@ proto-props@^2.0.0:
   resolved "https://registry.yarnpkg.com/proto-props/-/proto-props-2.0.0.tgz#8ac6e6dec658545815c623a3bc81580deda9a181"
   integrity sha512-2yma2tog9VaRZY2mn3Wq51uiSW4NcPYT1cQdBagwyrznrilKSZwIZ0UG3ZPL/mx+axEns0hE35T5ufOYZXEnBQ==
 
-ps-list@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/ps-list/-/ps-list-8.0.0.tgz#ee622c04a16ac0b29be65d7d920c1fb36c8383d4"
-  integrity sha512-rBBL6jp5Ccc5fy7p1Os5wDkXlJm5PeLCP2mVz1wLqEtKGo+d19oDApqVbePJoOxNlWeaxJxe28qahc3KWj9ePg==
+ps-list@^6.0.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/ps-list/-/ps-list-6.3.0.tgz#a2b775c2db7d547a28fbaa3a05e4c281771259be"
+  integrity sha512-qau0czUSB0fzSlBOQt0bo+I2v6R+xiQdj78e1BR/Qjfl5OHWJ/urXi8+ilw1eHe+5hSeDI1wrwVTgDp2wst4oA==
 
 pseudomap@^1.0.2:
   version "1.0.2"
