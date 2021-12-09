@@ -1,6 +1,6 @@
 {
 	"name": "alfred-node-debug",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Alfred workflow for triggering debugging of node processes",
 	"license": "MIT",
 	"author": {
@@ -8,8 +8,9 @@
 		"email": "rchl2k@gmail.com"
 	},
 	"engines": {
-		"node": ">=10"
+		"node": ">=14"
 	},
+	"type": "module",
 	"scripts": {
 		"test": "xo && ava",
 		"postinstall": "alfy-init",
@@ -31,16 +32,16 @@
 		"chrome"
 	],
 	"dependencies": {
-		"alfy": "^0.8.0",
+		"alfy": "^0.12.1",
 		"pid-from-port": "^1.1.2",
-		"ps-list": "^6.3.0",
+		"ps-list": "^8.0.0",
 		"tree-kill": "^1.2.1"
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
-		"alfy-test": "^0.3.0",
+		"alfy-test": "^0.4.2",
 		"ava": "*",
-		"get-port": "^5.0.0",
+		"get-port": "^6.0.0",
 		"xo": "*"
 	}
 }

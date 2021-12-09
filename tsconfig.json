@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-        "target": "ES2020",
-        "module": "ES2020",
+        "target": "es2021",
+        "module": "es2022",
         "esModuleInterop": true,
         "checkJs": true,
         "noEmit": true,
